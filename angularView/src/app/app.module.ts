@@ -11,16 +11,24 @@ import { ClientComponent } from './clients/client/client.component';
 import{Routes,RouterModule} from '@angular/router';
 import {HttpModule} from "@angular/http";
 import {HttpClientModule} from '@angular/common/http';
+import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { OrderListComponent } from './clients/order-list/order-list.component';
 
-//import { ToastrModule } from 'ngx-toastr';
 
 const routes:Routes=[{
   path:'',
   component:ClientComponent
 },
 {
-  path:'List',
+  path:'AddOrder',
   component:ClientListComponent,
+  //canActivate:[AuthguardService]
+
+},
+{
+  path:'OrderList',
+  component:OrderListComponent,
   //canActivate:[AuthguardService]
 
 },
@@ -32,12 +40,15 @@ const routes:Routes=[{
     AppComponent,
     ClientsComponent,
     ClientListComponent,
-    ClientComponent
+    ClientComponent,
+    OrderListComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
+    ToastrModule.forRoot(),
+    BrowserAnimationsModule,
     HttpClientModule,
    // ToastrModule.forRoot(),
     RouterModule.forRoot(routes)

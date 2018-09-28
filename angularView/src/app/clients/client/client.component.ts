@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { ClientService } from '../shared/client.service'
-//import { ToastrService } from 'ngx-toastr'
+import { ToastrService } from 'ngx-toastr'
 import { ItemService } from '../shared/item.service';
 
 @Component({
@@ -16,7 +16,7 @@ export class ClientComponent implements OnInit {
   message: string;
   clientList = null
 
-  constructor(private clientService: ClientService, private itemService: ItemService, private routes: Router ) { }
+  constructor(private clientService: ClientService, private itemService: ItemService,private toastr: ToastrService, private routes: Router ) { }
 
   ngOnInit() {
     this.resetForm();
@@ -24,11 +24,8 @@ export class ClientComponent implements OnInit {
   resetForm(form?: NgForm) {
     if (form != null)
       form.reset();
-
-
-    this.clientService.selectedClient = {
-     // ClientId: null,
-      ClientName: '',
+   this.clientService.selectedClient = {
+    ClientName: '',
       ClientAddress: '',
       ClientContact: null,
       ItemId: null
@@ -36,19 +33,20 @@ export class ClientComponent implements OnInit {
   }
 
   onSubmit(form: NgForm) {
-    console.log("hi")
-    console.log(form.controls.ItemId.value)
+    //console.log("hi")
+    //console.log(form.controls.ItemId.value)
     if (form.value.ClientId == null) {
-      console.log('Hiii');
+    //  console.log('Hiii');
       this.clientService.postClient(form.value).subscribe(data => {
-          console.log(data);
-         // this.toastr.success('New Record Added Succcessfully', 'Client Register');
+        //  console.log(data);
+          
           this.clientService.getClientList();
+          this.toastr.success('New Record Added Succcessfully', 'Client Register');
          // localStorage.setItem('key', data.EmpCode);
           
           this.cliID = form.controls.ItemId.value;
           this.itemService.cliID = form.controls.ItemId.value;
-          this.routes.navigate(['List']);
+          this.routes.navigate(['AddOrder']);
           this.resetForm(form);
 
 
@@ -63,7 +61,7 @@ export class ClientComponent implements OnInit {
         .subscribe(data => {
           this.resetForm(form);
           this.clientService.getClientList();
-          // this.toastr.info('Record Updated Successfully!', 'Client Register');
+           this.toastr.info('Record Updated Successfully!', 'Client Register');
         });
     }
   }

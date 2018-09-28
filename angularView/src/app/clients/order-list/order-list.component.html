@@ -1,0 +1,26 @@
+
+<table class="table table-sm table-hover">
+  <tr>
+    <th>Client Name</th>
+    <th>Item Category</th>
+    <th>Item Quantity</th>
+    <th>Item Name</th>
+  </tr>
+
+  <tr *ngFor="let order of orderList">
+    <td>{{order.clientName}}</td>
+    <td>{{order.itemcategory}} </td>
+    <td>{{order.itemQuantity}}</td>
+    <td>{{order.itemname}}</td>
+    <td>
+      <a class="btn" (click)="showForEdit(order)">
+        <i class="fa fa-pencil-square-o"></i>
+      </a>
+      <a class="btn text-danger" (click)="onDelete(order.orderId)">
+        <i class="fa fa-trash-o"></i>
+      </a>
+
+    </td>
+  </tr>
+ 
+</table>

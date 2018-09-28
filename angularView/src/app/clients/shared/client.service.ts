@@ -14,7 +14,7 @@ export class ClientService {
   constructor(private http: Http,private httpClient:HttpClient) { }
 
   postClient(cli: Client) {
-    console.log(cli);
+   // console.log(cli);
     var body = JSON.stringify(cli);
     var headerOptions = new Headers({ 'Content-Type': 'application/json' });
     var requestOptions = new RequestOptions({ method: RequestMethod.Post, headers: headerOptions });

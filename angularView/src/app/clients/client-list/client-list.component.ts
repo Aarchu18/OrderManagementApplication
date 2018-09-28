@@ -7,6 +7,7 @@ import { Client } from '../shared/client.model';
 import { Item } from '../shared/item.model';
 import { OrderService } from '../shared/order.service';
 import { Order } from '../shared/order.model';
+import { ToastrService } from 'ngx-toastr'
 
 @Component({
   selector: 'app-client-list',
@@ -16,16 +17,14 @@ import { Order } from '../shared/order.model';
 export class ClientListComponent implements OnInit {
   public clientList: any = [];
 
-  constructor(private clientService: ClientService, private orderService: OrderService, private itemService: ItemService, private routes: Router) { }
+  constructor(private clientService: ClientService, private toastr: ToastrService, private orderService: OrderService, private itemService: ItemService, private routes: Router) { }
 
   ngOnInit() {
     this.itemService.getItemList()
-
       .subscribe(
         res => {
-
           var abc = res.json();
-          console.log(abc)
+          console.log("aaa"+abc)
           abc.forEach((item) => {
             console.log(item)
             console.log("abc", item.itemCategory);
@@ -64,7 +63,7 @@ export class ClientListComponent implements OnInit {
     this.orderService.getOrderDetails().subscribe(
       orderData => {
         var order = orderData.json();
-        console.log(order)
+        // console.log(order)
 
       }
     )
@@ -74,7 +73,8 @@ export class ClientListComponent implements OnInit {
   itemdata = [];
   categoryData = [];
   clientNameList = [];
-  clientName: string;
+  ClientName: string;
+  clientName:string;
   itemCategory: string;
   itemQuantity: number;
   itemName: string;
@@ -83,32 +83,26 @@ export class ClientListComponent implements OnInit {
   ItemCategory: string;
   Itemname: string;
   ItemQuantity: number;
+  index:number=0;
   Order: Order;
   optionSelected: any;
   client: string;
   item: string;
   message: string;
+  data = [];
 
   public onOptionsSelected(event): void {  // event will give you full breif of action
-    //const newVal = event.target.value;
-
-    //console.log(event);
-    debugger
     this.client = event.clientName;
-    //console.log(this.client);
-
   }
   public onOptionsItemSelected(eventItem): void {
-    debugger;
-    console.log(eventItem);
+
+    // console.log(eventItem);
     this.item = eventItem.category;
   }
 
 
 
-  showForEdit(cli: Client) {
-    this.clientService.selectedClient = Object.assign({}, cli);;
-  }
+
   private fieldArray: Array<any> = [];
   private newAttribute: any = {};
 
@@ -120,55 +114,55 @@ export class ClientListComponent implements OnInit {
     this.itemdata.push(this.modal);
     this.itemCategory = "";
     this.itemQuantity = null;
-  }
-  // onAdd(form: NgForm) {
-  //   console.log(this.Order);
-  //   this.orderService.postOrderDetails(this.Order)
-  //     .subscribe(data => {
-  //       console.log("archana" + data);
-  //       // this.toastr.success('New Record Added Succcessfully', 'Qualification Register');
-
-  //     });
-  // }
-  onAdd(form: NgForm) {
-  
+    this.itemQuantity = null;
+}
+counter=0
+ onAdd(form: NgForm) {
+   
     if (form.value.OrderId == null) {
-
-
       var data = {
-
         ClientName: this.client,
         ItemCategory: this.item,
         Itemname: form.controls.ItemName.value,
-        ItemQuantity: form.controls.ItemQuantity.value
+        ItemQuantity: form.controls.ItemQuantity.value,
+        index:this.counter++,
       };
-      // console.log(data);
-      this.orderService.postOrderDetails(data).subscribe(item => {
-        // console.log(item)
-        this.orderService.getOrderDetails();
-
-      }, err => {
-        this.message = "Employee ID Already Exists";
-      }
-      )
-
-
+      this.toastr.success('New Record Added Succcessfully', 'Order Added');
+      console.log("success" + data.ClientName)
+      this.data.push(data);
+      form.reset();
     }
 
-
-    else {
-      this.orderService.putOrderDetails(form.value.OrderId, form.value)
-        .subscribe(data => {
-          // this.resetForm(form);
-          this.orderService.getOrderDetails();
-          // this.toastr.info('Record Updated Successfully!', 'Client Register');
-        });
-    }
   }
-  deleteFieldValue(index) {
-    this.itemdata.splice(index, 1);
-    this.itemService.getCliID;
-    this.itemService.Deleteitem(index);
+  onSave() {
+    console.log("post" + this.data)
+    this.orderService.postOrderDetails(this.data).subscribe(item => {
+      console.log("save" + item)
+      this.orderService.getOrderDetails();
+      this.routes.navigate(['OrderList']);
+
+    }, err => {
+      this.message = "Employee ID Already Exists";
+    }
+    )
+    
+  }
+
+  // deleteFieldValue(index) {
+  //   this.itemdata.splice(index, 1);
+  //   this.itemService.getCliID;
+  //   this.itemService.Deleteitem(index);
+  // }
+
+  showForEdit(order) {
+    debugger;
+    console.log("working"+JSON.stringify(order))
+     this.ItemQuantity=order.ItemQuantity;
+      this.ClientName= order.ClientName;
+      this.ItemCategory= order.ItemCategory;
+     this.Itemname= order.Itemname;
+    
+    // this.orderService.selectedOrder = Object.assign({}, data);;
   }
 
 
