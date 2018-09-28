@@ -1,0 +1,46 @@
+<div id="registeration-form">
+  <div style="text-align:center;padding: 10px;margin:20px;">
+      <h2 >Client Registration</h2>
+    </div>
+
+<form autocomplete="off"  #clientForm="ngForm" (ngSubmit)="onSubmit(clientForm)">
+  <div>
+    <div class="input">
+      <input name="ClientName" #ClientName="ngModel" [(ngModel)]="clientService.selectedClient.ClientName"
+        placeholder="Client Name" required maxlength="30">
+    </div>
+    <span class="validation-error" *ngIf="ClientName.invalid && ClientName.touched">
+      Client Name is Required.
+    </span>
+  </div>
+  <div>
+    <div class="input" >
+      <input name="ClientAddress" #ClientAddress="ngModel" [(ngModel)]="clientService.selectedClient.ClientAddress" placeholder="Client Address "
+        required maxlength="10000">
+    </div>
+    <span class="validation-error" *ngIf="ClientAddress.invalid && ClientAddress.touched">
+      Client Address is Required.
+    </span>
+  </div>
+  <div class="input">
+    <input type = "number" min="0" max="10" name="ClientContact" maxlength="50" #ClientContact="ngModel" [(ngModel)]="clientService.selectedClient.ClientContact" placeholder="Client Contact">
+  </div>
+  <div class="input">
+      <input type="number" min="0" max="10000" name="ItemId" #ItemId="ngModel" [(ngModel)]="clientService.selectedClient.ItemId" placeholder="item Id">
+  </div>
+  <div>
+    <span name="message">{{message}}</span>
+  </div>
+  
+  <div>
+    <div id="submit">
+      <button [disabled]="!clientForm.valid" type="submit">
+        <i class="fa fa-floppy-o"></i> Submit</button>
+    </div>
+    <div id="reset">
+      <button type="button" (click)="resetForm(clientForm)">
+        <i class="fa fa-repeat"></i> Reset</button>
+    </div>
+  </div>
+</form>
+</div>
